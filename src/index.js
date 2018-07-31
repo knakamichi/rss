@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import SearchBar from './components/search_bar'; // add folder names for files created (./ = cd)
+
+const API_KEY = 'AIzaSyBGdgzi6l9S4FCX84hUrOh2SAIufwfZhL8'; // api generated for browser
+
 // New component (should produce some html)
 
 // const App = function () {
@@ -8,7 +12,11 @@ import ReactDOM from 'react-dom';
 
 // above code using ES6 syntax
 const App = () => {
-  return <div> Hi! </div>;
+  return (
+    <div>
+      <SearchBar />
+    </div>
+  );
 }
 
 // take this component`s generated html and put it on the page (like the DOM)
