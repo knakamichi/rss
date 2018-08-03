@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import SearchBar from './components/search_bar'; // add folder names for files created (./ = cd)
 import VideoList from './components/video_list';
-import YTSearch from 'youtube-api-search'
+import VideoDetail from './components/video_detail';
+import YTSearch from 'youtube-api-search';
 const API_KEY = 'AIzaSyBGdgzi6l9S4FCX84hUrOh2SAIufwfZhL8'; // api generated for browser
 
 // // New component (should produce some html)
@@ -23,19 +24,28 @@ const API_KEY = 'AIzaSyBGdgzi6l9S4FCX84hUrOh2SAIufwfZhL8'; // api generated for 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { videos: [] }; // see search_bar.js
+    this.state = {
+      videos: [],
+      selectedVideo: null
+    }; // see search_bar.js
+
     // object for fetching data from API using ES6 ({videos} = {videos: videos} key = property name)
     YTSearch({key: API_KEY, term: 'surfboards'}, (videos) => {
-      this.setState({videos});
+      this.setState({
+        videos: videos,
+        selectedVideo: videos[0]
+      });
     });
-
   }
 
   render () {
       return (
         <div>
           <SearchBar />
-          <VideoList videos = {this.state.videos} />
+          <VideoDetail video = {this.state.selectedVideo} />
+          <VideoList
+            onVideoSelect={selectedVideo => this.setState({selectedVideo})} // whenever this function is called, change state
+            videos = {this.state.videos} />
         </div>
       );
   }
