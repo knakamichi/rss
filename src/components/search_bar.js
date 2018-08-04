@@ -17,16 +17,19 @@ class SearchBar extends Component {
       <div className= "search-bar">
         <input
           value = {this.state.term}
-          onChange={e => this.setState({term: e.target.value})}
+          onChange={event => this.onInputchange(event.target.value)}
         />
       </div>
-    ) ;
+    );
   }
+  // この term はどこからきてるのか？
 
-  onInputchange (e) {
-
-  }
+  onInputchange (term) {
+    this.setState({term});
+    this.props.onSearchTermChange(term);
+    }
 }
+
 
 export default SearchBar;
 

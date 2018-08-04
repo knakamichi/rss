@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import SearchBar from './components/search_bar'; // add folder names for files created (./ = cd)
@@ -24,13 +25,18 @@ const API_KEY = 'AIzaSyBGdgzi6l9S4FCX84hUrOh2SAIufwfZhL8'; // api generated for 
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       videos: [],
       selectedVideo: null
     }; // see search_bar.js
 
-    // object for fetching data from API using ES6 ({videos} = {videos: videos} key = property name)
-    YTSearch({key: API_KEY, term: 'surfboards'}, (videos) => {
+    this.videoSearch('surfboards');
+  }
+
+  videoSearch(term) {
+      // object for fetching data from API using ES6 ({videos} = {videos: videos} key = property name)
+    YTSearch({key: API_KEY, term: term}, (videos) => {
       this.setState({
         videos: videos,
         selectedVideo: videos[0]
@@ -38,16 +44,19 @@ class App extends Component {
     });
   }
 
+
+
   render () {
-      return (
-        <div>
-          <SearchBar />
-          <VideoDetail video = {this.state.selectedVideo} />
-          <VideoList
-            onVideoSelect={selectedVideo => this.setState({selectedVideo})} // whenever this function is called, change state
-            videos = {this.state.videos} />
-        </div>
-      );
+    const videoSearch = _.debounce((term)=>{this.videoSearch(term)}, 300); // throttle when to kick off search function (300 milsec)
+    return (
+      <div>
+        <SearchBar onSearchTermChange = {videoSearch} />
+        <VideoDetail video = {this.state.selectedVideo} />
+        <VideoList
+          onVideoSelect={selectedVideo => this.setState({selectedVideo})} // whenever this function is called, change state
+          videos = {this.state.videos} />
+      </div>
+    );
   }
 }
 
